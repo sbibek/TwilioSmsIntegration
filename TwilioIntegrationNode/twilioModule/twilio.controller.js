@@ -1,4 +1,5 @@
 var twilioService = require('./twilio.service');
+var dbService = require('../sqliteModule/database');
 
 var twilioController = function (app) {
     app.post('/send', (req, res) => {
@@ -13,11 +14,20 @@ var twilioController = function (app) {
         }
         // now if we are here means, we have everything for twilio service
         twilioService.twilioSendSms(req.body.accountSid, req.body.authToken, req.body.message, req.body.from, req.body.to).then(response => {
-            res.json({
-                success: true,
-                errorCode: 0,
-                message: response.sid 
-            });
+            // this is success then lets insert it into db
+            dbService.insertSentSms(req.body.from, req.body.to, req.body.message).then(() => {
+                res.json({
+                    success: true,
+                    errorCode: 0,
+                    message: response.sid
+                });
+            }).catch((err) => {
+                res.status(500).json({
+                    success: false,
+                    errorCode: 201,
+                    messssage: err
+                });
+            })
         }).catch((err) => {
             res.status(500).json({
                 success: false,
@@ -39,4 +49,5 @@ var hasAllRequiredParams = function (object, requiedParams) {
 
 module.exports = function (app) {
     twilioController(app);
+    console.log('twilo controller plugged');
 }
