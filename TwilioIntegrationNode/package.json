@@ -9,6 +9,7 @@
   "author": "bibek-shrestha",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "twilio": "^3.17.0"
   }
 }
