@@ -3,6 +3,7 @@ var dbService = require('../sqliteModule/database');
 const MessagingResponse = require('twilio').twiml.MessagingResponse;
 
 var twilioController = function (app) {
+    // this send post api is called from frontend
     app.post('/send', (req, res) => {
         // we should have proper parameters
         if (!hasAllRequiredParams(req.body, ['accountSid', 'authToken', 'from', 'to', 'message'])) {

@@ -15,9 +15,14 @@ export class AppComponent implements OnInit {
 
   public receivedSms = [];
   public sentSms = [];
-  constructor(private twilio:TwilioService){}
+  constructor(private twilio: TwilioService) { }
 
-  ngOnInit(){
+  ngOnInit() {
+    this.refreshMessages();
+  }
+
+  // refresh the messages
+  public refreshMessages() {
     Promise.all([this.twilio.getSentMessages(), this.twilio.getReceivedMessages()]).then(result => {
       this.sentSms = result[0];
       this.receivedSms = result[1];
@@ -26,18 +31,21 @@ export class AppComponent implements OnInit {
     })
   }
 
+  // check if fields are valid
   public isValid() {
     return this.sendObject.accountSid != '' && this.sendObject.authToken != '' &&
       this.sendObject.from != '' && this.sendObject.to != '' && this.sendObject.message != '';
   }
 
-  public send(){
+  // fire send
+  public send() {
     this.sending = true;
     this.twilio.sendSmsRequest(this.sendObject).then(res => {
       this.sending = false;
       this.isSuccess = true;
       this.showAlert = true;
       this.sendObject.from = this.sendObject.to = this.sendObject.message = "";
+      this.refreshMessages();
     }).catch(err => {
       this.sending = false;
       this.isSuccess = false;

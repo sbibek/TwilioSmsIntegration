@@ -3,6 +3,12 @@
     color: white;
 }
 
+.refresh {
+  margin-left: 20px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
 .spinner {
     margin: 100px auto 0;
     width: 70px;
