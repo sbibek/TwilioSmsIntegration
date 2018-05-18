@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Send } from './models/send.model';
 import { TwilioService } from './service/twilio.service';
 
@@ -7,13 +7,24 @@ import { TwilioService } from './service/twilio.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   public sendObject = new Send();
   public sending = false;
   public isSuccess = false;
   public showAlert = false;
 
+  public receivedSms = [];
+  public sentSms = [];
   constructor(private twilio:TwilioService){}
+
+  ngOnInit(){
+    Promise.all([this.twilio.getSentMessages(), this.twilio.getReceivedMessages()]).then(result => {
+      this.sentSms = result[0];
+      this.receivedSms = result[1];
+    }).catch(err => {
+      console.log(err);
+    })
+  }
 
   public isValid() {
     return this.sendObject.accountSid != '' && this.sendObject.authToken != '' &&
