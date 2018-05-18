@@ -1,5 +1,6 @@
 var twilioService = require('./twilio.service');
 var dbService = require('../sqliteModule/database');
+const MessagingResponse = require('twilio').twiml.MessagingResponse;
 
 var twilioController = function (app) {
     app.post('/send', (req, res) => {
@@ -36,6 +37,18 @@ var twilioController = function (app) {
             });
         }).done();
     });
+
+    // incoming message hook from twilio
+    app.post('/incoming', (req,res) => {
+        console.log("received message");
+        console.log(req);
+        console.log(req.body);
+        console.log("received message");
+        const twiml = new MessagingResponse();
+        twiml.message('Thank you for the response');
+        res.writeHead(200, {'Content-Type': 'text/xml'});
+        res.end(twiml.toString());
+    })
 }
 
 // check if we have all required fields
