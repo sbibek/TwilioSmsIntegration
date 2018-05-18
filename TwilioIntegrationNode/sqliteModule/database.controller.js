@@ -1,6 +1,9 @@
 var dbService = require('./database');
 
+// initialize the db related access functionalities with express app
 var init = function (app) {
+
+    // get all sent sms
     app.get('/sent', (req, resp) => {
         dbService.getAllSentSms().then(rows => {
             resp.json(rows);
@@ -13,6 +16,7 @@ var init = function (app) {
         })
     })
 
+    // get all received sms
     app.get('/rcvd', (req, resp) => {
         dbService.getAllRcvdSms().then(rows => {
             resp.json(rows);

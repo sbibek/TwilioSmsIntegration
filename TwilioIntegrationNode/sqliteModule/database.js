@@ -1,6 +1,7 @@
 var sqlite3 = require('sqlite3').verbose();
 var db;
 
+// send table creation
 var sendTableCreate = `
 CREATE TABLE IF NOT EXISTS sent_sms (
     id integer PRIMARY KEY AUTOINCREMENT,
@@ -9,6 +10,8 @@ CREATE TABLE IF NOT EXISTS sent_sms (
     message NOT NULL
    );
 `;
+
+// rcv table creation
 var rcvTableCreate = `
 CREATE TABLE IF NOT EXISTS rcvd_sms (
     id integer PRIMARY KEY AUTOINCREMENT,,
@@ -18,7 +21,7 @@ CREATE TABLE IF NOT EXISTS rcvd_sms (
    );
 `;
 
-
+// connecting to sqlite as a file db
 var connect = function (location) {
     return new Promise((resolve, reject) => {
         db = new sqlite3.Database(location, (err) => {
@@ -76,6 +79,7 @@ var insertRcvdSms = function (from, to, message) {
     });
 }
 
+// get all rows from sent sms table
 var getAllSentSms = function () {
     return new Promise((resolve, reject) => {
         db.serialize(() => {
@@ -87,6 +91,7 @@ var getAllSentSms = function () {
     })
 }
 
+// get all rows from rcvd sms table
 var getAllRcvdSms = function () {
     return new Promise((resolve, reject) => {
         db.serialize(() => {
@@ -98,6 +103,7 @@ var getAllRcvdSms = function () {
     })
 }
 
+// export the functionality
 module.exports = {
     connect: connect,
     insertSentSms: insertSentSms,

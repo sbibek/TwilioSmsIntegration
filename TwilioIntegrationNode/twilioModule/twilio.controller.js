@@ -47,6 +47,7 @@ var hasAllRequiredParams = function (object, requiedParams) {
     return true;
 }
 
+// export the functionality
 module.exports = function (app) {
     twilioController(app);
     console.log('twilo controller plugged');
