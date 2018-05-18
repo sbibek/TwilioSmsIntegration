@@ -40,14 +40,18 @@ var twilioController = function (app) {
 
     // incoming message hook from twilio
     app.post('/incoming', (req,res) => {
-        console.log("received message");
-        console.log(req);
-        console.log(req.body);
-        console.log("received message");
+        // send response regardless
         const twiml = new MessagingResponse();
         twiml.message('Thank you for the response');
         res.writeHead(200, {'Content-Type': 'text/xml'});
-        res.end(twiml.toString());
+        dbService.insertRcvdSms(req.body.From,req.body.To,req.body.Body).then(()=>{
+            console.log("incoming message saved");
+         res.end(twiml.toString());
+        }).catch((err) => {
+            console.log(err)
+            console.log("unable to save the incoming message");
+            res.end(twiml.toString());
+        })
     })
 }
 

@@ -2,24 +2,16 @@ var sqlite3 = require('sqlite3').verbose();
 var db;
 
 // send table creation
-var sendTableCreate = `
-CREATE TABLE IF NOT EXISTS sent_sms (
+var tables = `
+CREATE TABLE IF NOT EXISTS sms (
     id integer PRIMARY KEY AUTOINCREMENT,
     sender text NOT NULL,
     receiver text NOT NULL,
-    message NOT NULL
+    message NOT NULL,
+    type integer NOT NULL
    );
 `;
 
-// rcv table creation
-var rcvTableCreate = `
-CREATE TABLE IF NOT EXISTS rcvd_sms (
-    id integer PRIMARY KEY AUTOINCREMENT,,
-    sender text NOT NULL,
-    receiver text NOT NULL,
-    message NOT NULL
-   );
-`;
 
 // connecting to sqlite as a file db
 var connect = function (location) {
@@ -44,13 +36,9 @@ var connect = function (location) {
 // create tables if it doesnt exist
 var createTablesIfNotExists = function (fn) {
     db.serialize(() => {
-        db.run(sendTableCreate, (err) => {
+        db.run(tables, (err) => {
             if (err) { fn(err); return; }
             fn();
-            db.run(rcvTableCreate, (e) => {
-                if (e) { fn(e); return; }
-                fn();
-            })
         });
     })
 }
@@ -59,7 +47,7 @@ var createTablesIfNotExists = function (fn) {
 var insertSentSms = function (from, to, message) {
     return new Promise((resolve, reject) => {
         db.serialize(() => {
-            db.run('insert into sent_sms (sender,receiver, message) values (?,?,?)', [from, to, message], (err) => {
+            db.run('insert into sms (sender,receiver, message, type) values (?,?,?,?)', [from, to, message,1], (err) => {
                 if (err) reject(err);
                 else resolve();
             })
@@ -71,7 +59,7 @@ var insertSentSms = function (from, to, message) {
 var insertRcvdSms = function (from, to, message) {
     return new Promise((resolve, reject) => {
         db.serialize(() => {
-            db.run('insert into rcvd_sms (sender,receiver, message) values (?,?,?)', [from, to, message], (err) => {
+            db.run('insert into sms (sender,receiver, message, type) values (?,?,?,?)', [from, to, message,2], (err) => {
                 if (err) reject(err);
                 else resolve();
             })
@@ -83,7 +71,7 @@ var insertRcvdSms = function (from, to, message) {
 var getAllSentSms = function () {
     return new Promise((resolve, reject) => {
         db.serialize(() => {
-            db.all('select * from sent_sms', (err, rows) => {
+            db.all('select * from sms where type=1', (err, rows) => {
                 if (err) reject(err);
                 else resolve(rows);
             })
@@ -95,7 +83,7 @@ var getAllSentSms = function () {
 var getAllRcvdSms = function () {
     return new Promise((resolve, reject) => {
         db.serialize(() => {
-            db.all('select * from rcvd_sms', (err, rows) => {
+            db.all('select * from sms where type=2', (err, rows) => {
                 if (err) reject(err);
                 else resolve(rows);
             })

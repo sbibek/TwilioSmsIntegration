@@ -11,6 +11,9 @@ app.use(function (req, res, next) {
     next();
 });
 
+// lets serve our static files too
+app.use(express.static('public'))
+
 // use bodyparser for parsing post params
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
