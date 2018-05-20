@@ -1,16 +1,16 @@
 # Twilio Integration project
 This project demonstrates integration of Twilio two way sms using
-Anuglar 6 with angular-cli@6.0.1 as frontend
-NodeJS@10.1.0 as backend
-Sqlite3 as file based db
+- Angular 6 with angular-cli@6.0.1 as frontend
+- NodeJS@10.1.0 as backend
+- Sqlite3 as file based db
 
-Angular6 codebase TwilioSmsIntegration/TwilioIntegration
-NodJS codebase TwilioSmsIntegration/TwilioIntegrationNode
+### Angular6 codebase TwilioSmsIntegration/TwilioIntegration
+### NodJS codebase TwilioSmsIntegration/TwilioIntegrationNode
 
 ## Get started
+````
 Install Node, NPM @latest
 Install angular-cli@6.0.1
-
 cd TwilioSmsIntegration/TwilioIntegration
 npm install
 // now build the project which will create a public folder in Node folder of the project
@@ -18,13 +18,12 @@ ng build --prod
 
 cd TwilioSmsIntegration/TwilioIntegrationNode
 npm install
-
 // now finally run the server, defaut port 9090
 node index.js
-
+````
 Now you can reach localhost:9090 and access the project.
 You can send sms with your own twilio keys, but to receive the sms  you need to set up two way sms in your twilio account and point the webhook url for incoming sms in twilio to 
-http://ip_where_this_project_is_hosted:port/incoming (Method POST)
+````http://ip_where_this_project_is_hosted:port/incoming (Method POST)````
 
 Important: Make sure that your IP is publicly accessible.
 
